@@ -19,7 +19,7 @@ export function Header() {
     cart_icon.href = "/dashboard"
     tracking_icon.href = "/dashboard"
     money_icon.href = "/dashboard"
-    profile.href = "/dashboard"
+    profile.href = "/pages/login/index.html"
     search_inp.placeholder = "Search product here"
     search_inp.type = "text"
     lens.src = "/public/icons/lens_icon.svg"
