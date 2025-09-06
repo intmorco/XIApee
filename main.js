@@ -1,5 +1,15 @@
 import { Header } from "./components/header";
+import { Product } from "./components/product";
 Header() 
+Product()
+Product()
+Product()
+Product()
+Product()
+Product()
+Product()
+Product()
+
 
 // Add interactivity
 document.querySelectorAll('.tab').forEach(tab => {
