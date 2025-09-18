@@ -1,4 +1,3 @@
-// Mart Component
 export function Mart(martData) {
     const card = document.createElement('div');
     const img = document.createElement('div');
@@ -8,7 +7,6 @@ export function Mart(martData) {
     const category = document.createElement('span');
     const status = document.createElement('div');
 
-    // Set classes
     card.classList.add('minimart-card');
     img.classList.add('minimart-image');
     content.classList.add('card-content');
@@ -16,7 +14,6 @@ export function Mart(martData) {
     meta.classList.add('restaurant-meta');
     status.classList.add('mart-status');
 
-    // Set content
     img.innerHTML = martData.icon || "🏪";
     name.innerHTML = martData.name || "Mart Name";
     category.innerHTML = martData.category || "Groceries";
@@ -26,7 +23,6 @@ export function Mart(martData) {
         status.classList.add(martData.status.toLowerCase().replace(' ', '-'));
     }
 
-    // Assemble the card
     card.append(img, content);
     content.append(name, meta);
     meta.append(category);
@@ -35,12 +31,10 @@ export function Mart(martData) {
         content.append(status);
     }
 
-    // Add click event for navigation
     card.addEventListener('click', function() {
         window.location.href = `/pages/mart/index.html?id=${martData.id || '1'}`;
     });
 
-    // Add hover effect
     card.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-5px)';
         this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
