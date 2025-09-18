@@ -1,5 +1,5 @@
 import { Header } from "./components/header";
-import { Product } from "./components/product";
+import { ProductCard } from "./components/product";
 import { createRestaurants, sampleRestaurants } from "./components/restaurant";
 import { createMarts, sampleMarts } from "./components/mart";
 
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.classList.add("active");
 
             // Reset search input
-            const searchInput = document.querySelector(".search_inp");
+            const searchInput = document.querySelector(".logout_btn");
             if (searchInput) searchInput.value = "";
 
             // Remove active state from all categories
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Search functionality
 function initializeSearch() {
-    const searchInput = document.querySelector(".search_inp");
+    const searchInput = document.querySelector(".logout_btn");
     if (searchInput) {
         searchInput.addEventListener("input", function () {
             const searchTerm = this.value.toLowerCase();
@@ -152,3 +152,5 @@ function filterByCategory(categoryName) {
         });
     }
 }
+
+

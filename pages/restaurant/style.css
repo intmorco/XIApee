@@ -1,0 +1,104 @@
+@import url('/pages/restaurant/style.css');
+
+/* Page-specific layout (keeps base look-and-feel) */
+.main-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.product-grid {
+    margin-top: 10px;
+}
+
+.add-btn {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #4a7c59;
+    color: #fff;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    filter: brightness(0.95);
+}
+
+.cart-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 16px;
+    position: sticky;
+    top: 20px;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 55vh;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+}
+
+.item-title {
+    color: #2d5a3d;
+    font-weight: 600;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid #e2eaf1;
+    background: #fff;
+    cursor: pointer;
+}
+
+.remove-btn {
+    margin-left: 8px;
+    color: #a33;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.cart-footer {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pay-btn {
+    padding: 10px 14px;
+    background: #4a7c59;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}

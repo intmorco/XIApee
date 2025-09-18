@@ -10,19 +10,21 @@ export function Header() {
     const tracking_icon = document.createElement('a')
     const money_icon = document.createElement('a')
     const profile = document.createElement('a')
-    const search_inp = document.createElement('button')
+    const logout_btn = document.createElement('button')
     // const lens = document.createElement('img')
 
     logo_img.href = "/dashboard"
     name.innerHTML = "XIApee"
-    home_icon.href = "/pages/login/index.html"
+    home_icon.href = "/index.html"
     cart_icon.href = "/dashboard"
     tracking_icon.href = "/dashboard"
     money_icon.href = "/dashboard"
     profile.href = "/pages/profile/index.html"
-    search_inp.placeholder = "Search product here"
-    search_inp.type = "text"
-    search_inp.innerHTML = "Log out"
+
+    logout_btn.innerHTML = "Log out"
+    logout_btn.onclick = () => {
+        window.location.href = "/pages/login/index.html"
+    }
     // lens.src = "/public/icons/lens_icon.svg"
     logo_img.style.backgroundImage = `url(/public/img/logo.png)`
     home_icon.style.backgroundImage = `url(/public/icons/home_icon.png)`
@@ -41,7 +43,7 @@ export function Header() {
     tracking_icon.classList.add('tracking_icon')
     money_icon.classList.add('money_icon')
     profile.classList.add('profile')
-    search_inp.classList.add('search_inp')
+    logout_btn.classList.add('logout_btn')
     // lens.classList.add('lens')
     home_icon.classList.add('icon')
     cart_icon.classList.add('icon')
@@ -52,7 +54,7 @@ export function Header() {
     header_cont.append(left, middle, right)
     left.append(logo_img, name)
     middle.append(home_icon, cart_icon, tracking_icon, money_icon, profile)
-    right.append(search_inp)
+    right.append(logout_btn)
 
     const header = document.querySelector('header')
     header.append(header_cont)
