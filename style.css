@@ -182,6 +182,12 @@ header {
     border-bottom-color: #4a7c59;
 }
 
+.category.active {
+    color: #4a7c59;
+    border-bottom-color: #4a7c59;
+    font-weight: 600;
+}
+
 
 .section-title {
     font-size: 24px;
@@ -279,6 +285,30 @@ header {
     align-items: center;
     justify-content: center;
     font-size: 40px;
+}
+
+.mart-status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.mart-status.open {
+    background: #e8f5e8;
+    color: #4a7c59;
+}
+
+.mart-status.closed {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.mart-status.busy {
+    background: #fff3cd;
+    color: #856404;
 }
 
 .background-elements {
