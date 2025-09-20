@@ -1,7 +1,7 @@
-import { Header } from '../../components/header.js';
-import { sampleRestaurants } from '../../components/restaurant.js';
-import { ProductCard, sampleProducts } from '../../components/product.js';
-import { createCart } from '../../components/cart.js';
+import { Header } from '/components/header.js';
+import { sampleRestaurants } from '/components/restaurant.js';
+import { ProductCard, sampleProducts } from '/components/product.js';
+import { createCart } from '/components/cart.js';
 
 Header();
 

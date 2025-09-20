@@ -32,10 +32,7 @@ export function Mart(martData) {
     }
 
     card.addEventListener('click', function() {
-        // Determine if we're in a subdirectory (pages) or root
-        const isInSubdirectory = window.location.pathname.includes('/pages/')
-        const basePath = isInSubdirectory ? '../' : './'
-        window.location.href = `${basePath}pages/mart/index.html?id=${martData.id || '1'}`;
+        window.location.href = `/pages/mart/index.html?id=${martData.id || '1'}`;
     });
 
     card.addEventListener('mouseenter', function() {

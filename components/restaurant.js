@@ -39,10 +39,7 @@ export function Restaurant(restaurantData) {
 
     // Add click event for navigation
     card.addEventListener('click', function() {
-        // Determine if we're in a subdirectory (pages) or root
-        const isInSubdirectory = window.location.pathname.includes('/pages/')
-        const basePath = isInSubdirectory ? '../' : './'
-        window.location.href = `${basePath}pages/restaurant/index.html?id=${restaurantData.id || '1'}`;
+        window.location.href = `/pages/restaurant/index.html?id=${restaurantData.id || '1'}`;
     });
 
     // Add hover effect
