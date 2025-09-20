@@ -13,25 +13,30 @@ export function Header() {
     const logout_btn = document.createElement('button')
     // const lens = document.createElement('img')
 
-    logo_img.href = "/dashboard"
+    // Determine if we're in a subdirectory (pages) or root
+    const isInSubdirectory = window.location.pathname.includes('/pages/')
+    const basePath = isInSubdirectory ? '../' : './'
+    const pagesPath = isInSubdirectory ? '../' : './'
+
+    logo_img.href = `${basePath}index.html`
     name.innerHTML = "XIApee"
-    home_icon.href = "/index.html"
-    cart_icon.href = "/dashboard"
-    tracking_icon.href = "/dashboard"
-    money_icon.href = "/dashboard"
-    profile.href = "/pages/profile/index.html"
+    home_icon.href = `${basePath}index.html`
+    cart_icon.href = `${basePath}index.html`
+    tracking_icon.href = `${basePath}index.html`
+    money_icon.href = `${basePath}index.html`
+    profile.href = `${pagesPath}pages/profile/index.html`
 
     logout_btn.innerHTML = "Log out"
     logout_btn.onclick = () => {
-        window.location.href = "/pages/login/index.html"
+        window.location.href = `${pagesPath}pages/login/index.html`
     }
     // lens.src = "/public/icons/lens_icon.svg"
-    logo_img.style.backgroundImage = `url(/public/img/logo.png)`
-    home_icon.style.backgroundImage = `url(/public/icons/home_icon.png)`
-    cart_icon.style.backgroundImage = `url(/public/icons/cart_icon.png)`
-    tracking_icon.style.backgroundImage = `url(/public/icons/tracking_icon.png)`
-    money_icon.style.backgroundImage = `url(/public/icons/money_icon.png)`
-    profile.style.backgroundImage = `url(/public/icons/profile_icon.svg)`
+    logo_img.style.backgroundImage = `url(${basePath}public/img/logo.png)`
+    home_icon.style.backgroundImage = `url(${basePath}public/icons/home_icon.png)`
+    cart_icon.style.backgroundImage = `url(${basePath}public/icons/cart_icon.png)`
+    tracking_icon.style.backgroundImage = `url(${basePath}public/icons/tracking_icon.png)`
+    money_icon.style.backgroundImage = `url(${basePath}public/icons/money_icon.png)`
+    profile.style.backgroundImage = `url(${basePath}public/icons/profile_icon.svg)`
 
     header_cont.classList.add('header_cont')
     left.classList.add('left')
