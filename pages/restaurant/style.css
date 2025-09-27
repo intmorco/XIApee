@@ -34,6 +34,21 @@
     top: 20px;
 }
 
+.item-addons {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.addon {
+    background: #e8f5e8;
+    color: #2d5a3d;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin-right: 3px;
+    display: inline-block;
+}
+
 .cart-header {
     display: flex;
     justify-content: space-between;

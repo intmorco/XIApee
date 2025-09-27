@@ -29,6 +29,29 @@ export function ProductCard(product, onAdd) {
         if (typeof onAdd === 'function') onAdd(product);
     });
 
+    // Add click event to navigate to product detail page
+    card.addEventListener('click', (e) => {
+        if (e.target === addBtn) return; // Don't navigate if clicking add button
+        
+        // Get vendor info from URL or context
+        const currentPath = window.location.pathname;
+        let vendorType = 'restaurant';
+        let vendorId = '1';
+        
+        if (currentPath.includes('/mart/')) {
+            vendorType = 'mart';
+            const urlParams = new URLSearchParams(window.location.search);
+            vendorId = urlParams.get('id') || '1';
+        } else if (currentPath.includes('/restaurant/')) {
+            vendorType = 'restaurant';
+            const urlParams = new URLSearchParams(window.location.search);
+            vendorId = urlParams.get('id') || '1';
+        }
+        
+        // Navigate to product page
+        window.location.href = `/pages/product/index.html?id=${product.id}&type=${vendorType}&vendorId=${vendorId}`;
+    });
+
     return card;
 }
 

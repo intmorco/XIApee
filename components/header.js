@@ -13,10 +13,11 @@ export function Header() {
     const logout_btn = document.createElement('button')
     // const lens = document.createElement('img')
 
-    logo_img.href = "/dashboard"
+    // Use root-based paths for all navigation and assets
+    logo_img.href = "/index.html"
     name.innerHTML = "XIApee"
     home_icon.href = "/index.html"
-    cart_icon.href = "/dashboard"
+    cart_icon.href = "/pages/cart/index.html"
     tracking_icon.href = "/dashboard"
     money_icon.href = "/dashboard"
     profile.href = "/pages/profile/index.html"

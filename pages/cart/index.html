@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIApee - Shopping Cart</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/pages/cart/style.css">
+</head>
+
+<body>
+    <header class="container"></header>
+
+    <div class="main-container">
+        <div class="cart-page-header">
+            <h1 class="hero-title">Shopping Cart</h1>
+            <p class="cart-subtitle">Review your items before checkout</p>
+        </div>
+
+        <div class="cart-content">
+            <div class="cart-items-section">
+                <div class="cart-items-container" id="cart-items-container">
+                    <!-- Cart items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="cart-summary-section">
+                <div class="cart-summary">
+                    <h3>Order Summary</h3>
+                    <div class="summary-line">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">RM 0.00</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Delivery Fee:</span>
+                        <span id="delivery-fee">RM 2.50</span>
+                    </div>
+                    <div class="summary-line total">
+                        <span>Total:</span>
+                        <span id="total">RM 2.50</span>
+                    </div>
+                    <button class="checkout-btn" id="checkout-btn" disabled>
+                        Proceed to Checkout
+                    </button>
+                    <button class="clear-cart-btn" id="clear-cart-btn">
+                        Clear Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-cart" id="empty-cart" style="display: none;">
+            <div class="empty-cart-content">
+                <div class="empty-cart-icon">🛒</div>
+                <h2>Your cart is empty</h2>
+                <p>Add some delicious items to get started!</p>
+                <a href="/index.html" class="continue-shopping-btn">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/pages/cart/script.js"></script>
+</body>
+
+</html>

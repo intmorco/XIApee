@@ -1,7 +1,7 @@
 import { Header } from '/components/header.js';
 import { sampleRestaurants } from '/components/restaurant.js';
 import { ProductCard, sampleProducts } from '/components/product.js';
-import { createCart } from '/components/cart.js';
+import { createCart, globalCart } from '/components/cart.js';
 
 Header();
 
@@ -20,7 +20,7 @@ const cart = createCart('#cart-container');
 function renderProducts(list) {
     productGrid.innerHTML = '';
     list.forEach((p) => {
-        const node = ProductCard(p, (prod) => cart.addItem(prod));
+        const node = ProductCard(p, (prod) => globalCart.addItem(prod));
         productGrid.appendChild(node);
     });
 }

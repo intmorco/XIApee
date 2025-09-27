@@ -1,15 +1,19 @@
-import { Header } from "./components/header";
-import { ProductCard } from "./components/product";
-import { createRestaurants, sampleRestaurants } from "./components/restaurant";
-import { createMarts, sampleMarts } from "./components/mart";
+import { Header } from "/components/header.js";
+import { ProductCard } from "/components/product.js";
+import { createRestaurants, sampleRestaurants } from "/components/restaurant.js";
+import { createMarts, sampleMarts } from "/components/mart.js";
+import { globalCart } from "/components/cart.js";
 
 // Initialize header
 Header();
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Initialize restaurants and marts
+    // Initialize restaurants and marts with cart integration
     createRestaurants(sampleRestaurants);
     createMarts(sampleMarts);
+    
+    // Add cart functionality to product cards
+    addCartFunctionality();
 
     const restaurantSection = document.querySelector(".restaurants-section");
     const martSection = document.querySelector(".minimarts-section");
@@ -153,4 +157,42 @@ function filterByCategory(categoryName) {
     }
 }
 
+// Add cart functionality to product cards
+function addCartFunctionality() {
+    // Add event listeners to all product cards for cart functionality
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('add-btn')) {
+            const card = e.target.closest('.restaurant-card');
+            if (!card) return;
+            
+            // Extract product info from the card
+            const name = card.querySelector('.restaurant-name')?.textContent;
+            const priceText = card.querySelector('.restaurant-meta span')?.textContent;
+            const price = parseFloat(priceText?.replace('RM ', '') || '0');
+            const icon = card.querySelector('.card-image')?.textContent || '🍽️';
+            
+            if (name && price) {
+                const product = {
+                    id: `main-${name.toLowerCase().replace(/\s+/g, '-')}`,
+                    name: name,
+                    price: price,
+                    icon: icon,
+                    category: 'General'
+                };
+                
+                globalCart.addItem(product);
+                
+                // Show feedback
+                const originalText = e.target.textContent;
+                e.target.textContent = 'Added!';
+                e.target.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    e.target.textContent = originalText;
+                    e.target.style.background = '#4a7c59';
+                }, 1500);
+            }
+        }
+    });
+}
 
