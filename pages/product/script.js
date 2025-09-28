@@ -1,36 +1,11 @@
 import { Header } from '/components/header.js';
 import { globalCart } from '/components/cart.js';
-import { sampleProducts } from '/components/product.js';
 
 // Initialize header
 Header();
 
-// Sample addons data for restaurant products
-const sampleAddons = {
-    'r1-p1': [ // Nasi Lemak
-        { id: 'addon-1', name: 'Extra Chicken', price: 3.00 },
-        { id: 'addon-2', name: 'Extra Sambal', price: 1.00 },
-        { id: 'addon-3', name: 'Fried Egg', price: 2.00 },
-        { id: 'addon-4', name: 'Cucumber', price: 0.50 }
-    ],
-    'r1-p2': [ // Teh Tarik
-        { id: 'addon-5', name: 'Extra Sweet', price: 0.00 },
-        { id: 'addon-6', name: 'Less Sweet', price: 0.00 },
-        { id: 'addon-7', name: 'Extra Ice', price: 0.00 }
-    ],
-    'r5-p1': [ // Pepperoni Pizza
-        { id: 'addon-8', name: 'Extra Cheese', price: 2.50 },
-        { id: 'addon-9', name: 'Extra Pepperoni', price: 3.00 },
-        { id: 'addon-10', name: 'Mushrooms', price: 1.50 },
-        { id: 'addon-11', name: 'Bell Peppers', price: 1.00 }
-    ],
-    'r6-p1': [ // Cheeseburger
-        { id: 'addon-12', name: 'Extra Cheese', price: 1.50 },
-        { id: 'addon-13', name: 'Bacon', price: 2.50 },
-        { id: 'addon-14', name: 'Extra Patty', price: 4.00 },
-        { id: 'addon-15', name: 'Avocado', price: 2.00 }
-    ]
-};
+// Will be populated from /data/db.json
+let db = null;
 
 // DOM elements
 const productTitle = document.getElementById('product-title');
@@ -49,29 +24,32 @@ const totalPriceElement = document.getElementById('total-price');
 const addToCartBtn = document.getElementById('add-to-cart-btn');
 const buyNowBtn = document.getElementById('buy-now-btn');
 const productNotFound = document.getElementById('product-not-found');
+// Vendor info elements
+const vendorInfoBox = document.getElementById('vendor-info');
+const vendorNameEl = document.getElementById('vendor-name');
+const vendorCategoryEl = document.getElementById('vendor-category');
+const vendorLocationEl = document.getElementById('vendor-location');
+const vendorDescEl = document.getElementById('vendor-desc');
+const vendorLinkEl = document.getElementById('vendor-link');
+// Mini cart elements
+const miniItems = document.getElementById('cart-items-mini');
+const miniSubtotal = document.getElementById('mini-subtotal');
+const miniDelivery = document.getElementById('mini-delivery');
+const miniTotal = document.getElementById('mini-total');
 
 // State
 let currentProduct = null;
 let selectedAddons = [];
 let quantity = 1;
+let currentVendor = null; // { vendorType, vendorId, vendorName, vendorLocation, cuisine/category }
 
 // Get product from URL parameters
-function getProductFromURL() {
+function getParams() {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
-    const vendorType = params.get('type'); // 'restaurant' or 'mart'
-    const vendorId = params.get('vendorId');
-    
-    if (!productId || !vendorType || !vendorId) {
-        return null;
-    }
-    
-    const products = sampleProducts[vendorType];
-    if (!products || !products[vendorId]) {
-        return null;
-    }
-    
-    return products[vendorId].find(p => p.id === productId);
+    const vendorType = params.get('type') || params.get('vendor') || '';
+    const vendorId = params.get('vendorId') || params.get('vendor') || '';
+    return { productId, vendorType, vendorId };
 }
 
 // Render product details
@@ -83,19 +61,26 @@ function renderProduct(product) {
     productTitle.textContent = product.name;
     
     // Update product details
-    productImage.textContent = product.icon || '🍽️';
+    if (product.image) {
+        productImage.style.backgroundImage = `url(${product.image})`;
+        productImage.style.backgroundSize = 'cover';
+        productImage.style.backgroundPosition = 'center';
+        productImage.textContent = '';
+    } else {
+        productImage.textContent = product.icon || '🍽️';
+    }
     productName.textContent = product.name;
-    productCategory.textContent = product.category || 'General';
+    productCategory.textContent = (product.category || currentVendor?.cuisine || 'General');
     productPrice.textContent = `RM ${Number(product.price).toFixed(2)}`;
     
     // Generate description based on product
-    productDescription.textContent = generateProductDescription(product);
+    productDescription.textContent = product.description || generateProductDescription(product);
     
     // Update base price
     basePriceElement.textContent = `RM ${Number(product.price).toFixed(2)}`;
     
     // Check if product has addons
-    const addons = sampleAddons[product.id] || [];
+    const addons = product.addons || [];
     if (addons.length > 0) {
         renderAddons(addons);
         addonsSection.style.display = 'block';
@@ -199,7 +184,7 @@ function handleAddToCart() {
         
         // Add multiple items based on quantity
         for (let i = 0; i < quantity; i++) {
-            globalCart.addItem(currentProduct, selectedAddons);
+            globalCart.addItem(currentProduct, selectedAddons, currentVendor || {});
         }
         
         // Show success message
@@ -221,7 +206,7 @@ function handleBuyNow() {
         
         // Add to cart first
         for (let i = 0; i < quantity; i++) {
-            globalCart.addItem(currentProduct, selectedAddons);
+            globalCart.addItem(currentProduct, selectedAddons, currentVendor || {});
         }
         
         // Redirect to cart page
@@ -229,21 +214,91 @@ function handleBuyNow() {
     });
 }
 
+// Render vendor info block
+function renderVendorInfo() {
+    if (!currentVendor) return;
+    vendorInfoBox.style.display = 'block';
+    vendorNameEl.textContent = currentVendor.vendorName || 'Vendor';
+    vendorCategoryEl.textContent = currentVendor.cuisine || currentVendor.category || 'General';
+    vendorLocationEl.textContent = currentVendor.vendorLocation || '-';
+    vendorDescEl.textContent = currentVendor.description || '';
+    vendorLinkEl.href = currentVendor.vendorType === 'mart'
+        ? `/pages/mart/index.html?id=${currentVendor.vendorId}`
+        : `/pages/restaurant/index.html?id=${currentVendor.vendorId}`;
+}
+
+// Mini cart render
+function renderMiniCart() {
+    const items = globalCart.getItems();
+    miniItems.innerHTML = items.map(it => `
+        <div class="mini-item">
+            <span>${it.icon || '🍽️'} ${it.name} × ${it.qty}</span>
+            <span>RM ${(it.price * it.qty).toFixed(2)}</span>
+        </div>
+    `).join('') || '<div class="mini-item empty">No items yet</div>';
+    const summary = globalCart.getCartSummary();
+    miniSubtotal.textContent = `RM ${summary.subtotal.toFixed(2)}`;
+    miniDelivery.textContent = `RM ${summary.deliveryFee.toFixed(2)}`;
+    miniTotal.textContent = `RM ${summary.total.toFixed(2)}`;
+}
+
 // Initialize page
-document.addEventListener('DOMContentLoaded', () => {
-    const product = getProductFromURL();
-    
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load DB
+    try {
+        const res = await fetch('/data/db.json');
+        db = await res.json();
+    } catch (e) {
+        console.error('Failed to load DB', e);
+    }
+
+    const { productId, vendorType, vendorId } = getParams();
+    if (!db || !productId) {
+        productNotFound.style.display = 'block';
+        document.querySelector('.product-content').style.display = 'none';
+        return;
+    }
+
+    let vendorCollection = vendorType === 'mart' ? db.minimarts : db.restaurants;
+    // If vendorId not provided, attempt to find the product across all vendors
+    let product = null;
+    let vendor = null;
+    if (vendorId) {
+        vendor = (vendorCollection || []).find(v => String(v.id) === String(vendorId));
+        if (vendor) {
+            product = (vendor.products || []).find(p => p.id === productId);
+        }
+    }
+    if (!product) {
+        outer: for (const v of vendorCollection || []) {
+            const found = (v.products || []).find(p => p.id === productId);
+            if (found) { product = found; vendor = v; break outer; }
+        }
+    }
+
     if (!product) {
         productNotFound.style.display = 'block';
         document.querySelector('.product-content').style.display = 'none';
         return;
     }
-    
-    // Render product
+
+    currentVendor = vendor ? {
+        vendorType: vendorType === 'mart' ? 'mart' : 'restaurant',
+        vendorId: vendor.id,
+        vendorName: vendor.name,
+        vendorLocation: vendor.location,
+        cuisine: vendor.cuisine,
+        category: vendor.cuisine,
+        description: vendor.description
+    } : null;
+
     renderProduct(product);
-    
-    // Set up event handlers
+    renderVendorInfo();
     handleQuantityControls();
     handleAddToCart();
     handleBuyNow();
+
+    // Listen to cart updates
+    globalCart.addListener(renderMiniCart);
+    renderMiniCart();
 });

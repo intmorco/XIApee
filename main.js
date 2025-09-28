@@ -128,33 +128,26 @@ function initializeCategoryFilters() {
 
 // Filter cards by category
 function filterByCategory(categoryName) {
-    const activeTab = document.querySelector(".tab.active");
-    const isRestaurantTab =
-        activeTab && activeTab.textContent.includes("Restaurants");
+    const normalized = categoryName.toLowerCase();
+    const showAll = normalized === 'all';
 
-    if (isRestaurantTab) {
-        document.querySelectorAll(".restaurant-card").forEach((card) => {
-            const cardCategory = card
-                .querySelector(".restaurant-meta span")
-                .textContent.toLowerCase();
+    // For restaurants section: match by cuisine or product category tag text on cards
+    document.querySelectorAll('.restaurants-section .restaurant-card').forEach((card) => {
+        const nameText = card.querySelector('.restaurant-name')?.textContent?.toLowerCase() || '';
+        const metaSpans = card.querySelectorAll('.restaurant-meta span');
+        const metaText = Array.from(metaSpans).map(s=>s.textContent.toLowerCase()).join(' ');
+        const match = showAll || nameText.includes(normalized) || metaText.includes(normalized);
+        card.style.display = match ? 'block' : 'none';
+    });
 
-            card.style.display =
-                categoryName === "all" || cardCategory.includes(categoryName)
-                    ? "block"
-                    : "none";
-        });
-    } else {
-        document.querySelectorAll(".minimart-card").forEach((card) => {
-            const cardCategory = card
-                .querySelector(".restaurant-meta span")
-                .textContent.toLowerCase();
-
-            card.style.display =
-                categoryName === "all" || cardCategory.includes(categoryName)
-                    ? "block"
-                    : "none";
-        });
-    }
+    // For minimarts section: match by category-like text in meta
+    document.querySelectorAll('.minimarts-section .minimart-card, .minimarts-section .restaurant-card').forEach((card) => {
+        const nameText = card.querySelector('.restaurant-name')?.textContent?.toLowerCase() || '';
+        const metaSpans = card.querySelectorAll('.restaurant-meta span');
+        const metaText = Array.from(metaSpans).map(s=>s.textContent.toLowerCase()).join(' ');
+        const match = showAll || nameText.includes(normalized) || metaText.includes(normalized);
+        card.style.display = match ? 'block' : 'none';
+    });
 }
 
 // Add cart functionality to product cards

@@ -1,0 +1,218 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "name": "John Doe",
+      "customerNumber": "A1234567",
+      "address": "D5",
+      "balance": 150.0,
+      "orderHistory": []
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "r1",
+      "name": "Nasi Lemak Mak Elly",
+      "cuisine": "Asian",
+      "location": "B1",
+      "description": "Classic Malay breakfasts and comfort food.",
+      "image": "https://picsum.photos/seed/restaurant1/400/300",
+      "products": [
+        {
+          "id": "r1-p1",
+          "name": "Nasi Lemak",
+          "price": 8.5,
+          "description": "Coconut rice with sambal, anchovies, peanuts, and egg.",
+          "image": "https://picsum.photos/seed/r1p1/600/400",
+          "addons": [
+            { "id": "a1", "name": "Extra Chicken", "price": 3.0 },
+            { "id": "a2", "name": "Fried Egg", "price": 2.0 },
+            { "id": "a3", "name": "Extra Sambal", "price": 1.0 }
+          ]
+        },
+        {
+          "id": "r1-p2",
+          "name": "Teh Tarik",
+          "price": 3.0,
+          "description": "Pulled tea, hot or iced.",
+          "image": "https://picsum.photos/seed/r1p2/600/400",
+          "addons": [
+            { "id": "a4", "name": "Less Sweet", "price": 0 },
+            { "id": "a5", "name": "Extra Ice", "price": 0 }
+          ]
+        },
+        {
+          "id": "r1-p3",
+          "name": "Roti Canai",
+          "price": 4.0,
+          "description": "Flaky flatbread with dhal.",
+          "image": "https://picsum.photos/seed/r1p3/600/400",
+          "addons": [
+            { "id": "a6", "name": "Kari Ayam", "price": 3.0 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "name": "Teh Tarik Corner",
+      "cuisine": "Drinks",
+      "location": "LY3",
+      "description": "Malaysia's favorite beverages and light bites.",
+      "image": "https://picsum.photos/seed/restaurant2/400/300",
+      "products": [
+        {
+          "id": "r2-p1",
+          "name": "Mee Goreng",
+          "price": 9.2,
+          "description": "Stir-fried noodles with egg and veggies.",
+          "image": "https://picsum.photos/seed/r2p1/600/400",
+          "addons": []
+        },
+        {
+          "id": "r2-p2",
+          "name": "Teh O Ais",
+          "price": 2.8,
+          "description": "Iced tea, less sweet options available.",
+          "image": "https://picsum.photos/seed/r2p2/600/400",
+          "addons": []
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "name": "Sushi Ten",
+      "cuisine": "Asian",
+      "location": "D5",
+      "description": "Affordable sushi and Japanese sides.",
+      "image": "https://picsum.photos/seed/restaurant3/400/300",
+      "products": [
+        {
+          "id": "r3-p1",
+          "name": "Salmon Nigiri",
+          "price": 12.0,
+          "description": "Fresh salmon over sushi rice (2 pcs).",
+          "image": "https://picsum.photos/seed/r3p1/600/400",
+          "addons": []
+        },
+        {
+          "id": "r3-p2",
+          "name": "Miso Soup",
+          "price": 4.2,
+          "description": "Warm comforting miso soup.",
+          "image": "https://picsum.photos/seed/r3p2/600/400",
+          "addons": []
+        }
+      ]
+    },
+    {
+      "id": "r4",
+      "name": "Ayam Geprek Pedas",
+      "cuisine": "Asian",
+      "location": "B1",
+      "description": "Crispy smashed chicken with custom spice levels.",
+      "image": "https://picsum.photos/seed/restaurant4/400/300",
+      "products": [
+        {
+          "id": "r4-p1",
+          "name": "Ayam Geprek",
+          "price": 11.5,
+          "description": "Crispy chicken with sambal.",
+          "image": "https://picsum.photos/seed/r4p1/600/400",
+          "addons": [
+            { "id": "a7", "name": "Level 2", "price": 0 },
+            { "id": "a8", "name": "Level 5", "price": 0 }
+          ]
+        }
+      ]
+    }
+  ],
+  "minimarts": [
+    {
+      "id": "m1",
+      "name": "Campus Mart A",
+      "location": "LY3",
+      "description": "Daily essentials for students.",
+      "image": "https://picsum.photos/seed/mart1/400/300",
+      "products": [
+        {
+          "id": "m1-p1",
+          "name": "Mineral Water",
+          "price": 1.8,
+          "description": "Refreshing 600ml bottle.",
+          "image": "https://picsum.photos/seed/m1p1/600/400"
+        },
+        {
+          "id": "m1-p2",
+          "name": "Bread",
+          "price": 3.5,
+          "description": "Soft white bread.",
+          "image": "https://picsum.photos/seed/m1p2/600/400"
+        },
+        {
+          "id": "m1-p3",
+          "name": "Eggs (6)",
+          "price": 5.2,
+          "description": "Half-dozen fresh eggs.",
+          "image": "https://picsum.photos/seed/m1p3/600/400"
+        }
+      ]
+    },
+    {
+      "id": "m2",
+      "name": "Campus Mart B",
+      "location": "B1",
+      "description": "Snacks and beverages.",
+      "image": "https://picsum.photos/seed/mart2/400/300",
+      "products": [
+        {
+          "id": "m2-p1",
+          "name": "Orange Juice",
+          "price": 4.5,
+          "description": "1L tetra pack.",
+          "image": "https://picsum.photos/seed/m2p1/600/400"
+        },
+        {
+          "id": "m2-p2",
+          "name": "Bananas (1kg)",
+          "price": 6.9,
+          "description": "Fresh and sweet.",
+          "image": "https://picsum.photos/seed/m2p2/600/400"
+        }
+      ]
+    },
+    {
+      "id": "m3",
+      "name": "Campus Mart C",
+      "location": "D5",
+      "description": "Stationery and more.",
+      "image": "https://picsum.photos/seed/mart3/400/300",
+      "products": [
+        {
+          "id": "m3-p1",
+          "name": "Notebook",
+          "price": 3.9,
+          "description": "A5 ruled, 80 pages.",
+          "image": "https://picsum.photos/seed/m3p1/600/400"
+        },
+        {
+          "id": "m3-p2",
+          "name": "Pen (3pcs)",
+          "price": 2.5,
+          "description": "Smooth black ink.",
+          "image": "https://picsum.photos/seed/m3p2/600/400"
+        }
+      ]
+    }
+  ],
+  "orders": [],
+  "staff": [
+    {
+      "id": "s1",
+      "name": "Aida Delivery",
+      "phone": "+60 12-111 2222"
+    }
+  ]
+}
+
+

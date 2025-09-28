@@ -12,13 +12,12 @@ const totalElement = document.getElementById('total');
 const checkoutBtn = document.getElementById('checkout-btn');
 const clearCartBtn = document.getElementById('clear-cart-btn');
 
-const DELIVERY_FEE = 2.50;
+// Delivery fee is computed as RM2 per unique vendor using globalCart.getCartSummary()
 
 // Render cart items
 function renderCartItems() {
     const items = globalCart.getItems();
-    const subtotal = globalCart.getTotal();
-    const total = subtotal + DELIVERY_FEE;
+    const summary = globalCart.getCartSummary();
     
     if (items.length === 0) {
         cartItemsContainer.style.display = 'none';
@@ -39,7 +38,7 @@ function renderCartItems() {
                             ${item.addons.map(addon => `<span class="cart-item-addon">+ ${addon.name}</span>`).join('')}
                         </div>
                     ` : ''}
-                    <div class="cart-item-category">${item.category || 'General'}</div>
+                    <div class="cart-item-category">${item.category || 'General'}${item.vendorName ? ` • ${item.vendorName}` : ''}</div>
                 </div>
                 <div class="cart-item-controls">
                     <div class="cart-item-price">RM ${item.price.toFixed(2)}</div>
@@ -55,8 +54,9 @@ function renderCartItems() {
     }
     
     // Update summary
-    subtotalElement.textContent = `RM ${subtotal.toFixed(2)}`;
-    totalElement.textContent = `RM ${total.toFixed(2)}`;
+    subtotalElement.textContent = `RM ${summary.subtotal.toFixed(2)}`;
+    document.getElementById('delivery-fee').textContent = `RM ${summary.deliveryFee.toFixed(2)}`;
+    totalElement.textContent = `RM ${summary.total.toFixed(2)}`;
 }
 
 // Handle cart interactions
@@ -85,10 +85,7 @@ function handleCheckout() {
     checkoutBtn.addEventListener('click', () => {
         const items = globalCart.getItems();
         if (items.length === 0) return;
-        
-        // For now, just show an alert. In a real app, this would redirect to payment
-        const total = globalCart.getTotal() + DELIVERY_FEE;
-        alert(`Checkout functionality would be implemented here.\nTotal: RM ${total.toFixed(2)}`);
+        window.location.href = '/pages/payment/index.html';
     });
 }
 

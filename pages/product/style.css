@@ -25,7 +25,7 @@
 
 .product-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 1.2fr 0.8fr;
     gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
@@ -56,6 +56,19 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     padding: 30px;
 }
+
+.vendor-info {
+    margin: 15px 0 25px 0;
+    padding: 12px 14px;
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+.vendor-name { font-weight: 700; color: #2d5a3d; margin-bottom: 4px; }
+.vendor-meta { font-size: 12px; color: #666; display: flex; gap: 6px; margin-bottom: 6px; }
+.vendor-desc { color: #666; font-size: 14px; margin-bottom: 6px; }
+.vendor-link { color: #4a7c59; text-decoration: none; font-weight: 600; }
+.vendor-link:hover { text-decoration: underline; }
 
 .product-info {
     margin-bottom: 30px;
@@ -309,12 +322,17 @@
     transform: translateY(-2px);
 }
 
+.cart-sidebar { position: sticky; top: 20px; height: fit-content; }
+.cart-summary-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); padding: 20px; }
+.cart-summary-card h3 { color: #2d5a3d; margin-bottom: 10px; }
+.summary-line { display:flex; justify-content: space-between; padding: 6px 0; }
+.summary-line.total { border-top: 2px solid #e0e0e0; margin-top: 8px; padding-top: 10px; font-weight: 700; color: #2d5a3d; }
+.view-cart-btn { display: inline-block; margin-top: 12px; padding: 10px 14px; background: #4a7c59; color:#fff; border-radius:8px; text-decoration:none; font-weight:600; }
+.view-cart-btn:hover { background:#3d6b4a; }
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .product-content {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
+    .product-content { grid-template-columns: 1fr; gap: 20px; }
     
     .product-image-section {
         position: static;
@@ -329,13 +347,12 @@
         padding: 20px;
     }
     
-    .action-buttons {
-        flex-direction: column;
-    }
+    .action-buttons { flex-direction: column; }
     
     .product-page-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
+    .cart-sidebar { position: static; }
 }

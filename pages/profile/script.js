@@ -1,6 +1,6 @@
 // Profile Page JavaScript
 
-// Sample data for demonstration
+// Load data from db.json with local override for prototype
 const sampleData = {
     user: {
         name: "John Doe",
@@ -141,14 +141,72 @@ const sampleData = {
     ]
 };
 
+function getEffectiveDB() {
+    try {
+        const o = localStorage.getItem('xiapee_db_override');
+        if (o) return JSON.parse(o);
+    } catch {}
+    return null;
+}
+
+async function ensureDB() {
+    try {
+        const res = await fetch('/data/db.json');
+        const base = await res.json();
+        const override = getEffectiveDB();
+        return override || base;
+    } catch {
+        return null;
+    }
+}
+
 // Initialize the profile page
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    const db = await ensureDB();
+    if (db?.users?.length) {
+        const user = db.users[0];
+        sampleData.user.name = user.name;
+        sampleData.user.email = `${user.name.toLowerCase().replace(/\s+/g,'')}@example.com`;
+        sampleData.user.phone = '+60 12-345 6789';
+        sampleData.user.walletBalance = Number(user.balance || 0);
+        // Map orders
+        const orders = user.orderHistory || [];
+        sampleData.orders = orders.map(o => ({
+            id: o.id,
+            date: new Date(o.timestamp||Date.now()).toISOString().split('T')[0],
+            status: (o.status||'pending').toLowerCase().replace(/\s+/g,' '),
+            restaurant: (o.items?.[0]?.vendorName) || 'Mixed Vendors',
+            items: o.items?.reduce((n,it)=>n+Number(it.qty||0),0) || 0,
+            total: Number(o.total||0),
+            deliveryTime: '-' 
+        }));
+    }
     initializeProfile();
     loadOrderHistory();
     loadAddresses();
     loadWalletData();
     loadTransactions();
     loadPaymentMethods();
+    // Live updates from tracking page: poll override DB
+    setInterval(async () => {
+        const dbLive = getEffectiveDB();
+        if (dbLive?.users?.length) {
+            const user = dbLive.users[0];
+            const orders = user.orderHistory || [];
+            sampleData.user.walletBalance = Number(user.balance || 0);
+            sampleData.orders = orders.map(o => ({
+                id: o.id,
+                date: new Date(o.timestamp||Date.now()).toISOString().split('T')[0],
+                status: (o.status||'pending').toLowerCase().replace(/\s+/g,' '),
+                restaurant: (o.items?.[0]?.vendorName) || 'Mixed Vendors',
+                items: o.items?.reduce((n,it)=>n+Number(it.qty||0),0) || 0,
+                total: Number(o.total||0),
+                deliveryTime: '-' 
+            }));
+            loadOrderHistory();
+            loadWalletData();
+        }
+    }, 5000);
 });
 
 // Initialize profile data

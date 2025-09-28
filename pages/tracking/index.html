@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIApee - Order Tracking</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/pages/tracking/style.css">
+    <script type="module" src="/pages/tracking/script.js" defer></script>
+    <script>window.addEventListener('DOMContentLoaded',()=>{import('/components/header.js').then(m=>m.Header&&m.Header());});</script>
+</head>
+
+<body>
+    <header class="container"></header>
+    <div class="main-container">
+        <div class="tracking-header">
+            <h1 class="hero-title">Order Tracking</h1>
+            <div class="order-id" id="order-id">Order</div>
+        </div>
+        <div class="tracking-content">
+            <div class="order-info">
+                <div class="status" id="status">-</div>
+                <div class="drop-off">Drop-off: <span id="drop-off">-</span></div>
+                <div class="staff">Rider: <span id="staff-name">-</span> • <a id="staff-phone" href="#">Call</a></div>
+                <div class="items" id="items"></div>
+                <div class="bill">
+                    <div class="line"><span>Subtotal</span><span id="bill-subtotal">RM 0.00</span></div>
+                    <div class="line"><span>Delivery</span><span id="bill-delivery">RM 0.00</span></div>
+                    <div class="line total"><span>Total</span><span id="bill-total">RM 0.00</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="success" id="success" style="display:none;">Delivered ✅</div>
+    </div>
+</body>
+
+</html>
+

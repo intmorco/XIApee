@@ -54,6 +54,21 @@ class CartManager {
         return total;
     }
 
+    // Get summary: subtotal, unique vendor count, delivery fee, total
+    getCartSummary() {
+        const items = this.getItems();
+        const subtotal = this.getTotal();
+        const uniqueVendors = new Set();
+        items.forEach((item) => {
+            const vendorKey = item.vendorId ? `${item.vendorType || 'vendor'}:${item.vendorId}` : 'global';
+            uniqueVendors.add(vendorKey);
+        });
+        const vendorCount = uniqueVendors.size > 0 ? uniqueVendors.size : 0;
+        const deliveryFee = vendorCount * 2.0; // RM2 per unique vendor
+        const total = subtotal + deliveryFee;
+        return { subtotal, vendorCount, deliveryFee, total };
+    }
+
     // Get all items as array
     getItems() {
         return Array.from(this.items.values());
@@ -65,8 +80,8 @@ class CartManager {
     }
 
         // Add item to cart
-    addItem(product, addons = []) {
-        const id = this.generateItemId(product, addons);
+    addItem(product, addons = [], vendorInfo = {}) {
+        const id = this.generateItemId(product, addons, vendorInfo);
         const existing = this.items.get(id);
         
         if (existing) {
@@ -81,7 +96,11 @@ class CartManager {
                 qty: 1,
                 addons: addons,
                 icon: product.icon,
-                category: product.category
+                category: product.category,
+                vendorId: vendorInfo.vendorId || product.vendorId || null,
+                vendorName: vendorInfo.vendorName || product.vendorName || null,
+                vendorType: vendorInfo.vendorType || product.vendorType || null,
+                vendorLocation: vendorInfo.vendorLocation || product.vendorLocation || null
             });
         }
         
@@ -90,9 +109,10 @@ class CartManager {
     }
 
     // Generate unique ID for item with addons
-    generateItemId(product, addons) {
+    generateItemId(product, addons, vendorInfo = {}) {
         const addonIds = addons.map(a => a.id).sort().join(',');
-        return `${product.id}${addonIds ? `_${addonIds}` : ''}`;
+        const vendorKey = vendorInfo.vendorId || product.vendorId || '';
+        return `${product.id}${vendorKey ? `@${vendorKey}` : ''}${addonIds ? `_${addonIds}` : ''}`;
     }
 
     // Remove item from cart
@@ -112,6 +132,20 @@ class CartManager {
             this.items.delete(id);
         }
         
+        this.saveToStorage();
+        this.notifyListeners();
+    }
+
+    // Set item quantity to a specific value
+    updateQty(id, qty) {
+        const item = this.items.get(id);
+        if (!item) return;
+        const newQty = Number(qty);
+        if (!Number.isFinite(newQty) || newQty <= 0) {
+            this.items.delete(id);
+        } else {
+            item.qty = Math.floor(newQty);
+        }
         this.saveToStorage();
         this.notifyListeners();
     }
