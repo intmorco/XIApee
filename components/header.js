@@ -18,8 +18,8 @@ export function Header() {
     name.innerHTML = "XIApee"
     home_icon.href = "/index.html"
     cart_icon.href = "/pages/cart/index.html"
-    tracking_icon.href = "/dashboard"
-    money_icon.href = "/dashboard"
+    tracking_icon.href = "/pages/tracking/index.html"
+    money_icon.href = "/pages/payment/index.html"
     profile.href = "/pages/profile/index.html"
 
     logout_btn.innerHTML = "Log out"
@@ -51,6 +51,20 @@ export function Header() {
     tracking_icon.classList.add('icon')
     money_icon.classList.add('icon')
     profile.classList.add('icon')
+
+    // Add active page detection
+    const currentPath = window.location.pathname;
+    if (currentPath === '/' || currentPath === '/index.html') {
+        home_icon.classList.add('active');
+    } else if (currentPath.includes('/cart/')) {
+        cart_icon.classList.add('active');
+    } else if (currentPath.includes('/tracking/')) {
+        tracking_icon.classList.add('active');
+    } else if (currentPath.includes('/payment/')) {
+        money_icon.classList.add('active');
+    } else if (currentPath.includes('/profile/')) {
+        profile.classList.add('active');
+    }
 
     header_cont.append(left, middle, right)
     left.append(logo_img, name)

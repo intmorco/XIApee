@@ -3,15 +3,23 @@ let currentUser = null;
 let order = null;
 
 const orderIdEl = document.getElementById('order-id');
-const statusEl = document.getElementById('status');
+const estimatedTimeEl = document.getElementById('estimated-time');
 const dropOffEl = document.getElementById('drop-off');
 const staffNameEl = document.getElementById('staff-name');
 const staffPhoneEl = document.getElementById('staff-phone');
+const callBtn = document.getElementById('call-btn');
+const msgBtn = document.getElementById('msg-btn');
 const itemsEl = document.getElementById('items');
 const billSub = document.getElementById('bill-subtotal');
 const billDel = document.getElementById('bill-delivery');
 const billTot = document.getElementById('bill-total');
 const successEl = document.getElementById('success');
+
+// Step elements
+const stepConfirmed = document.getElementById('step-confirmed');
+const stepPrepared = document.getElementById('step-prepared');
+const stepDelivery = document.getElementById('step-delivery');
+const stepDelivered = document.getElementById('step-delivered');
 
 function getParamId() {
     const p = new URLSearchParams(window.location.search);
@@ -41,14 +49,69 @@ function findOrder(id) {
 function render() {
     if (!order) return;
     orderIdEl.textContent = order.id;
-    statusEl.textContent = order.status;
     dropOffEl.textContent = order.dropOff || '-';
     staffNameEl.textContent = order.staff?.name || '-';
-    if (order.staff?.phone) { staffPhoneEl.href = `tel:${order.staff.phone}`; staffPhoneEl.textContent = order.staff.phone; }
-    itemsEl.innerHTML = (order.items||[]).map(it => `<div class="it"><span>${it.name} × ${it.qty}</span><span>RM ${(it.price * it.qty).toFixed(2)}</span></div>`).join('');
+    staffPhoneEl.textContent = order.staff?.phone || '-';
+    
+    // Update estimated time based on status
+    const timeRemaining = getTimeRemaining(order.status);
+    estimatedTimeEl.textContent = `Estimated: ${timeRemaining} min`;
+    
+    // Update items list
+    itemsEl.innerHTML = (order.items||[]).map(it => `
+        <div class="item-row">
+            <span>${it.name} × ${it.qty}</span>
+            <span>RM ${(it.price * it.qty).toFixed(2)}</span>
+        </div>
+    `).join('');
+    
     billSub.textContent = `RM ${Number(order.subtotal||0).toFixed(2)}`;
     billDel.textContent = `RM ${Number(order.deliveryFee||0).toFixed(2)}`;
     billTot.textContent = `RM ${Number(order.total||0).toFixed(2)}`;
+    
+    // Update progress steps
+    updateProgressSteps(order.status);
+    
+    // Setup action buttons
+    if (order.staff?.phone) {
+        callBtn.onclick = () => window.open(`tel:${order.staff.phone}`);
+        msgBtn.onclick = () => window.open(`sms:${order.staff.phone}`);
+    }
+}
+
+function getTimeRemaining(status) {
+    const times = {
+        'Order Confirmed': 30,
+        'Being Prepared': 20,
+        'Out for Delivery': 10,
+        'Delivered': 0
+    };
+    return times[status] || 30;
+}
+
+function updateProgressSteps(status) {
+    // Reset all steps
+    [stepConfirmed, stepPrepared, stepDelivery, stepDelivered].forEach(step => {
+        step.classList.remove('active', 'completed');
+    });
+    
+    const statusMap = {
+        'Order Confirmed': [stepConfirmed],
+        'Being Prepared': [stepConfirmed, stepPrepared],
+        'Out for Delivery': [stepConfirmed, stepPrepared, stepDelivery],
+        'Delivered': [stepConfirmed, stepPrepared, stepDelivery, stepDelivered]
+    };
+    
+    const currentSteps = statusMap[status] || [];
+    const allSteps = [stepConfirmed, stepPrepared, stepDelivery, stepDelivered];
+    
+    allSteps.forEach((step, index) => {
+        if (index < currentSteps.length) {
+            step.classList.add('completed');
+        } else if (index === currentSteps.length) {
+            step.classList.add('active');
+        }
+    });
 }
 
 function progressStatus() {

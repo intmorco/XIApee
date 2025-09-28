@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     initializeProfile();
     loadOrderHistory();
+    loadPaymentHistory();
     loadAddresses();
     loadWalletData();
     loadTransactions();
@@ -204,6 +205,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 deliveryTime: '-' 
             }));
             loadOrderHistory();
+            loadPaymentHistory();
             loadWalletData();
         }
     }, 5000);
@@ -289,6 +291,36 @@ function loadOrderHistory() {
     });
 }
 
+// Load payment history
+function loadPaymentHistory() {
+    const paymentsList = document.getElementById('paymentsList');
+    const filter = document.getElementById('paymentFilter').value;
+    
+    let filteredPayments = sampleData.orders || [];
+    if (filter === 'recent') {
+        filteredPayments = filteredPayments.slice(-10);
+    } else if (filter === 'this-month') {
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        filteredPayments = filteredPayments.filter(order => {
+            const orderDate = new Date(order.date);
+            return orderDate.getMonth() === thisMonth && orderDate.getFullYear() === thisYear;
+        });
+    }
+    
+    paymentsList.innerHTML = '';
+    
+    if (filteredPayments.length === 0) {
+        paymentsList.innerHTML = '<div class="no-payments">No payments found.</div>';
+        return;
+    }
+    
+    filteredPayments.forEach(order => {
+        const paymentElement = createPaymentElement(order);
+        paymentsList.appendChild(paymentElement);
+    });
+}
+
 // Create order element
 function createOrderElement(order) {
     const orderDiv = document.createElement('div');
@@ -324,6 +356,27 @@ function createOrderElement(order) {
     `;
     
     return orderDiv;
+}
+
+// Create payment element
+function createPaymentElement(order) {
+    const paymentDiv = document.createElement('div');
+    paymentDiv.className = 'payment-item';
+    
+    paymentDiv.innerHTML = `
+        <div class="payment-info">
+            <div class="payment-id">${order.id}</div>
+            <div class="payment-date">${order.date}</div>
+            <div class="payment-status">${order.status}</div>
+        </div>
+        <div class="payment-amount">RM ${order.total.toFixed(2)}</div>
+    `;
+    
+    paymentDiv.addEventListener('click', () => {
+        window.location.href = `/pages/tracking/index.html?id=${order.id}`;
+    });
+    
+    return paymentDiv;
 }
 
 // Load addresses
@@ -553,6 +606,11 @@ document.getElementById('orderFilter').addEventListener('change', function() {
     loadOrderHistory();
 });
 
+// Payment filter
+document.getElementById('paymentFilter').addEventListener('change', function() {
+    loadPaymentHistory();
+});
+
 // Notification system
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
@@ -596,6 +654,82 @@ function loadWalletData() {
     document.getElementById('walletBalanceDisplay').textContent = `RM ${user.walletBalance.toFixed(2)}`;
     document.getElementById('availableBalance').textContent = `RM ${user.walletBalance.toFixed(2)}`;
     document.getElementById('currentBalanceDisplay').value = `RM ${user.walletBalance.toFixed(2)}`;
+}
+
+// Update wallet balance manually
+async function updateWalletBalance() {
+    const balanceInput = document.getElementById('currentBalanceDisplay');
+    const newBalance = parseFloat(balanceInput.value.replace('RM ', ''));
+    
+    if (isNaN(newBalance) || newBalance < 0) {
+        showNotification('Please enter a valid balance amount', 'error');
+        return;
+    }
+    
+    // Update local data
+    sampleData.user.walletBalance = newBalance;
+    
+    // Update database
+    await updateDatabaseBalance(newBalance);
+    
+    loadWalletData();
+    showNotification('Wallet balance updated successfully', 'success');
+}
+
+// Update database balance
+async function updateDatabaseBalance(newBalance) {
+    try {
+        // Get current database
+        const response = await fetch('/data/db.json');
+        const db = await response.json();
+        
+        // Update user balance
+        if (db.users && db.users.length > 0) {
+            db.users[0].balance = newBalance;
+        }
+        
+        // Store in localStorage for persistence (since we can't write to file directly)
+        localStorage.setItem('xiapee_db_override', JSON.stringify(db));
+        
+        // Update global balance display
+        updateGlobalBalanceDisplay(newBalance);
+        
+    } catch (error) {
+        console.error('Failed to update database:', error);
+        showNotification('Failed to update database', 'error');
+    }
+}
+
+// Update global balance display across all pages
+function updateGlobalBalanceDisplay(newBalance) {
+    // Update any wallet balance displays on the current page
+    const balanceElements = document.querySelectorAll('[id*="balance"], [id*="Balance"]');
+    balanceElements.forEach(element => {
+        if (element.textContent.includes('RM')) {
+            element.textContent = `RM ${newBalance.toFixed(2)}`;
+        }
+    });
+    
+    // Dispatch custom event for other pages to listen to
+    window.dispatchEvent(new CustomEvent('balanceUpdated', { 
+        detail: { newBalance } 
+    }));
+}
+
+// Top up wallet
+function topUpWallet() {
+    const topUpInput = document.getElementById('topUpAmount');
+    const amount = parseFloat(topUpInput.value);
+    
+    if (isNaN(amount) || amount <= 0) {
+        showNotification('Please enter a valid top-up amount', 'error');
+        return;
+    }
+    
+    sampleData.user.walletBalance += amount;
+    loadWalletData();
+    topUpInput.value = '';
+    showNotification(`Successfully topped up RM ${amount.toFixed(2)}`, 'success');
 }
 
 function loadTransactions() {
@@ -720,8 +854,9 @@ function selectAmount(amount) {
     document.getElementById('customAmount').value = amount;
 }
 
-function quickTopUp(amount) {
-    sampleData.user.walletBalance += amount;
+async function quickTopUp(amount) {
+    const newBalance = sampleData.user.walletBalance + amount;
+    sampleData.user.walletBalance = newBalance;
     
     // Add transaction
     const newTransaction = {
@@ -736,13 +871,16 @@ function quickTopUp(amount) {
     
     sampleData.transactions.unshift(newTransaction);
     
+    // Update database
+    await updateDatabaseBalance(newBalance);
+    
     // Update UI
     loadWalletData();
     loadTransactions();
     showNotification(`Successfully topped up RM ${amount.toFixed(2)}!`, 'success');
 }
 
-function processTopUp() {
+async function processTopUp() {
     const customAmount = parseFloat(document.getElementById('customAmount').value);
     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
     
@@ -759,8 +897,9 @@ function processTopUp() {
     // Simulate payment processing
     showNotification('Processing payment...', 'info');
     
-    setTimeout(() => {
-        sampleData.user.walletBalance += customAmount;
+    setTimeout(async () => {
+        const newBalance = sampleData.user.walletBalance + customAmount;
+        sampleData.user.walletBalance = newBalance;
         
         // Add transaction
         const newTransaction = {
@@ -774,6 +913,9 @@ function processTopUp() {
         };
         
         sampleData.transactions.unshift(newTransaction);
+        
+        // Update database
+        await updateDatabaseBalance(newBalance);
         
         // Update UI
         loadWalletData();
@@ -841,7 +983,7 @@ function processWithdrawal() {
 }
 
 // Balance Edit Functions
-function processBalanceEdit() {
+async function processBalanceEdit() {
     const newBalance = parseFloat(document.getElementById('newBalance').value);
     const reason = document.getElementById('balanceReason').value;
     const notes = document.getElementById('balanceNotes').value;
@@ -873,6 +1015,9 @@ function processBalanceEdit() {
     };
     
     sampleData.transactions.unshift(newTransaction);
+    
+    // Update database
+    await updateDatabaseBalance(newBalance);
     
     // Update UI
     loadWalletData();

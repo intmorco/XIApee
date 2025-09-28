@@ -15,6 +15,7 @@ const summaryItems = document.getElementById('summary-items');
 const sumSubtotal = document.getElementById('sum-subtotal');
 const sumDelivery = document.getElementById('sum-delivery');
 const sumTotal = document.getElementById('sum-total');
+const paymentHistory = document.getElementById('payment-history');
 
 function loadCartSummary() {
     const items = globalCart.getItems();
@@ -51,6 +52,26 @@ function autofillUser() {
         if (opt) addressSelect.value = opt.value; else { addressSelect.value = 'custom'; manualWrap.style.display = 'block'; manualAddress.value = String(currentUser.address); }
     }
     walletBalance.textContent = `RM ${(currentUser.balance ?? 0).toFixed(2)}`;
+}
+
+function loadPaymentHistory() {
+    const orders = currentUser?.orderHistory || [];
+    const recentOrders = orders.slice(-5).reverse(); // Last 5 orders
+    
+    if (recentOrders.length === 0) {
+        paymentHistory.innerHTML = '<div class="no-payments">No recent payments</div>';
+        return;
+    }
+    
+    paymentHistory.innerHTML = recentOrders.map(order => `
+        <div class="payment-item">
+            <div>
+                <div>${order.id}</div>
+                <div class="payment-date">${new Date(order.timestamp).toLocaleDateString()}</div>
+            </div>
+            <div class="payment-amount">RM ${Number(order.total).toFixed(2)}</div>
+        </div>
+    `).join('');
 }
 
 function bindControls() {
@@ -142,6 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (eff) { db = eff; currentUser = eff.users?.[0] || currentUser; }
     autofillUser();
     loadCartSummary();
+    loadPaymentHistory();
     bindControls();
     placeBtn.addEventListener('click', placeOrder);
 });

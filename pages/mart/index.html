@@ -1,34 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/public/icons/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIApee - Minimart</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/pages/mart/style.css">
-    <title>Minimart | XIApee</title>
 </head>
-
 <body>
     <header class="container"></header>
 
     <div class="main-container">
-        <div class="left-section">
-            <h1 class="hero-title" id="vendor-title">Minimart</h1>
-
-            <div class="categories" id="categories"></div>
-
-            <h2 class="section-title">Products</h2>
-            <div class="restaurant-grid product-grid" id="product-grid"></div>
+        <div class="mart-page-header">
+            <a href="javascript:history.back()" class="back-btn">← Back</a>
+            <h1 class="hero-title" id="mart-title">Minimart</h1>
         </div>
 
-        <aside class="right-section">
-            <div class="cart-panel" id="cart-container"></div>
-        </aside>
+        <div class="mart-content">
+            <div class="mart-info-section">
+                <div class="mart-image" id="mart-image">
+                    <!-- Mart image will be populated by JavaScript -->
+                </div>
+                <div class="mart-details">
+                    <h2 class="mart-name" id="mart-name">Mart Name</h2>
+                    <div class="mart-meta">
+                        <span class="type">Minimart</span>
+                        <span>•</span>
+                        <span class="location" id="mart-location">Location</span>
+                    </div>
+                    <div class="mart-description" id="mart-description">
+                        Mart description will appear here.
+                    </div>
+                </div>
+            </div>
+
+            <div class="products-section">
+                <h3>Products</h3>
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="mart-not-found" id="mart-not-found" style="display: none;">
+            <div class="not-found-content">
+                <div class="not-found-icon">❌</div>
+                <h2>Minimart Not Found</h2>
+                <p>The minimart you're looking for doesn't exist or has been removed.</p>
+                <a href="/index.html" class="back-to-home-btn">Back to Home</a>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="/pages/mart/script.js"></script>
 </body>
-
 </html>

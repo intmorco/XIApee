@@ -1,55 +1,113 @@
 import { Header } from '/components/header.js';
-import { sampleMarts } from '/components/mart.js';
-import { ProductCard, sampleProducts } from '/components/product.js';
-import { createCart, globalCart } from '/components/cart.js';
 
+// Initialize header
 Header();
 
-const params = new URLSearchParams(window.location.search);
-const id = Number(params.get('id')) || 1;
+let db = null;
+let currentMart = null;
 
-const mart = sampleMarts.find(m => Number(m.id) === id) || sampleMarts[0];
-const titleEl = document.getElementById('vendor-title');
-titleEl.textContent = mart?.name || 'Minimart';
+// DOM elements
+const martTitle = document.getElementById('mart-title');
+const martImage = document.getElementById('mart-image');
+const martName = document.getElementById('mart-name');
+const martLocation = document.getElementById('mart-location');
+const martDescription = document.getElementById('mart-description');
+const productsGrid = document.getElementById('products-grid');
+const martNotFound = document.getElementById('mart-not-found');
 
-const products = (sampleProducts.mart[String(id)] || sampleProducts.mart[id]) || [];
-const productGrid = document.getElementById('product-grid');
+// Get mart ID from URL parameters
+function getMartId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+}
 
-const cart = createCart('#cart-container');
+// Load database
+async function loadDB() {
+    try {
+        const response = await fetch('/data/db.json');
+        db = await response.json();
+    } catch (error) {
+        console.error('Failed to load database:', error);
+    }
+}
 
-function renderProducts(list) {
-    productGrid.innerHTML = '';
-    list.forEach((p) => {
-        const node = ProductCard(p, (prod) => globalCart.addItem(prod));
-        productGrid.appendChild(node);
+// Find mart by ID
+function findMart(id) {
+    if (!db || !db.minimarts) return null;
+    return db.minimarts.find(mart => mart.id === id);
+}
+
+// Render mart details
+function renderMart(mart) {
+    currentMart = mart;
+    
+    // Update page title
+    document.title = `${mart.name} | XIApee`;
+    martTitle.textContent = mart.name;
+    
+    // Update mart details
+    if (mart.image) {
+        martImage.innerHTML = `<img src="${mart.image}" alt="${mart.name}">`;
+    } else {
+        martImage.textContent = '🏪';
+    }
+    
+    martName.textContent = mart.name;
+    martLocation.textContent = mart.location;
+    martDescription.textContent = mart.description;
+    
+    // Render products
+    renderProducts(mart.products || []);
+}
+
+// Render products
+function renderProducts(products) {
+    productsGrid.innerHTML = '';
+    
+    products.forEach(product => {
+        const productCard = createProductCard(product);
+        productsGrid.appendChild(productCard);
     });
 }
 
-function buildCategories(list) {
-    const cats = Array.from(new Set(list.map(p => p.category))).sort();
-    const container = document.getElementById('categories');
-    container.innerHTML = '';
-
-    const mk = (label) => {
-        const a = document.createElement('a');
-        a.href = '#';
-        a.className = 'category';
-        a.textContent = label;
-        a.addEventListener('click', (e) => {
-            e.preventDefault();
-            container.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
-            a.classList.add('active');
-            if (label === 'All') renderProducts(products);
-            else renderProducts(products.filter(p => p.category === label));
-        });
-        return a;
-    };
-
-    const all = mk('All');
-    all.classList.add('active');
-    container.appendChild(all);
-    cats.forEach(c => container.appendChild(mk(c)));
+// Create product card
+function createProductCard(product) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    
+    card.innerHTML = `
+        <div class="product-image">
+            ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '🏪'}
+        </div>
+        <div class="product-name">${product.name}</div>
+        <div class="product-description">${product.description}</div>
+        <div class="product-price">RM ${Number(product.price).toFixed(2)}</div>
+    `;
+    
+    card.addEventListener('click', () => {
+        window.location.href = `/pages/product/index.html?id=${product.id}&type=mart&vendorId=${currentMart.id}`;
+    });
+    
+    return card;
 }
 
-buildCategories(products);
-renderProducts(products);
+// Initialize page
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadDB();
+    
+    const martId = getMartId();
+    if (!martId) {
+        martNotFound.style.display = 'block';
+        document.querySelector('.mart-content').style.display = 'none';
+        return;
+    }
+    
+    const mart = findMart(martId);
+    if (!mart) {
+        martNotFound.style.display = 'block';
+        document.querySelector('.mart-content').style.display = 'none';
+        return;
+    }
+    
+    renderMart(mart);
+});

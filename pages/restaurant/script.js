@@ -1,55 +1,115 @@
 import { Header } from '/components/header.js';
-import { sampleRestaurants } from '/components/restaurant.js';
-import { ProductCard, sampleProducts } from '/components/product.js';
-import { createCart, globalCart } from '/components/cart.js';
 
+// Initialize header
 Header();
 
-const params = new URLSearchParams(window.location.search);
-const id = Number(params.get('id')) || 1;
+let db = null;
+let currentRestaurant = null;
 
-const restaurant = sampleRestaurants.find(r => Number(r.id) === id) || sampleRestaurants[0];
-const titleEl = document.getElementById('vendor-title');
-titleEl.textContent = restaurant?.name || 'Restaurant';
+// DOM elements
+const restaurantTitle = document.getElementById('restaurant-title');
+const restaurantImage = document.getElementById('restaurant-image');
+const restaurantName = document.getElementById('restaurant-name');
+const restaurantCuisine = document.getElementById('restaurant-cuisine');
+const restaurantLocation = document.getElementById('restaurant-location');
+const restaurantDescription = document.getElementById('restaurant-description');
+const productsGrid = document.getElementById('products-grid');
+const restaurantNotFound = document.getElementById('restaurant-not-found');
 
-const products = (sampleProducts.restaurant[String(id)] || sampleProducts.restaurant[id]) || [];
-const productGrid = document.getElementById('product-grid');
+// Get restaurant ID from URL parameters
+function getRestaurantId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+}
 
-const cart = createCart('#cart-container');
+// Load database
+async function loadDB() {
+    try {
+        const response = await fetch('/data/db.json');
+        db = await response.json();
+    } catch (error) {
+        console.error('Failed to load database:', error);
+    }
+}
 
-function renderProducts(list) {
-    productGrid.innerHTML = '';
-    list.forEach((p) => {
-        const node = ProductCard(p, (prod) => globalCart.addItem(prod));
-        productGrid.appendChild(node);
+// Find restaurant by ID
+function findRestaurant(id) {
+    if (!db || !db.restaurants) return null;
+    return db.restaurants.find(restaurant => restaurant.id === id);
+}
+
+// Render restaurant details
+function renderRestaurant(restaurant) {
+    currentRestaurant = restaurant;
+    
+    // Update page title
+    document.title = `${restaurant.name} | XIApee`;
+    restaurantTitle.textContent = restaurant.name;
+    
+    // Update restaurant details
+    if (restaurant.image) {
+        restaurantImage.innerHTML = `<img src="${restaurant.image}" alt="${restaurant.name}">`;
+    } else {
+        restaurantImage.textContent = '🍽️';
+    }
+    
+    restaurantName.textContent = restaurant.name;
+    restaurantCuisine.textContent = restaurant.cuisine;
+    restaurantLocation.textContent = restaurant.location;
+    restaurantDescription.textContent = restaurant.description;
+    
+    // Render products
+    renderProducts(restaurant.products || []);
+}
+
+// Render products
+function renderProducts(products) {
+    productsGrid.innerHTML = '';
+    
+    products.forEach(product => {
+        const productCard = createProductCard(product);
+        productsGrid.appendChild(productCard);
     });
 }
 
-function buildCategories(list) {
-    const cats = Array.from(new Set(list.map(p => p.category))).sort();
-    const container = document.getElementById('categories');
-    container.innerHTML = '';
-
-    const mk = (label) => {
-        const a = document.createElement('a');
-        a.href = '#';
-        a.className = 'category';
-        a.textContent = label;
-        a.addEventListener('click', (e) => {
-            e.preventDefault();
-            container.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
-            a.classList.add('active');
-            if (label === 'All') renderProducts(products);
-            else renderProducts(products.filter(p => p.category === label));
-        });
-        return a;
-    };
-
-    const all = mk('All');
-    all.classList.add('active');
-    container.appendChild(all);
-    cats.forEach(c => container.appendChild(mk(c)));
+// Create product card
+function createProductCard(product) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    
+    card.innerHTML = `
+        <div class="product-image">
+            ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '🍽️'}
+        </div>
+        <div class="product-name">${product.name}</div>
+        <div class="product-description">${product.description}</div>
+        <div class="product-price">RM ${Number(product.price).toFixed(2)}</div>
+    `;
+    
+    card.addEventListener('click', () => {
+        window.location.href = `/pages/product/index.html?id=${product.id}&type=restaurant&vendorId=${currentRestaurant.id}`;
+    });
+    
+    return card;
 }
 
-buildCategories(products);
-renderProducts(products);
+// Initialize page
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadDB();
+    
+    const restaurantId = getRestaurantId();
+    if (!restaurantId) {
+        restaurantNotFound.style.display = 'block';
+        document.querySelector('.restaurant-content').style.display = 'none';
+        return;
+    }
+    
+    const restaurant = findRestaurant(restaurantId);
+    if (!restaurant) {
+        restaurantNotFound.style.display = 'block';
+        document.querySelector('.restaurant-content').style.display = 'none';
+        return;
+    }
+    
+    renderRestaurant(restaurant);
+});

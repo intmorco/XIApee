@@ -50,6 +50,38 @@
           "addons": [
             { "id": "a6", "name": "Kari Ayam", "price": 3.0 }
           ]
+        },
+        {
+          "id": "r1-p4",
+          "name": "Nasi Goreng Kampung",
+          "price": 9.5,
+          "description": "Traditional fried rice with anchovies and vegetables.",
+          "image": "https://picsum.photos/seed/r1p4/600/400",
+          "addons": [
+            { "id": "a7", "name": "Extra Chicken", "price": 3.0 },
+            { "id": "a8", "name": "Fried Egg", "price": 2.0 }
+          ]
+        },
+        {
+          "id": "r1-p5",
+          "name": "Laksa Johor",
+          "price": 10.5,
+          "description": "Spicy noodle soup with fish and vegetables.",
+          "image": "https://picsum.photos/seed/r1p5/600/400",
+          "addons": [
+            { "id": "a9", "name": "Extra Fish", "price": 4.0 },
+            { "id": "a10", "name": "Extra Vegetables", "price": 2.0 }
+          ]
+        },
+        {
+          "id": "r1-p6",
+          "name": "Cendol",
+          "price": 4.5,
+          "description": "Traditional dessert with shaved ice and coconut milk.",
+          "image": "https://picsum.photos/seed/r1p6/600/400",
+          "addons": [
+            { "id": "a11", "name": "Extra Gula Melaka", "price": 1.0 }
+          ]
         }
       ]
     },
@@ -76,6 +108,64 @@
           "description": "Iced tea, less sweet options available.",
           "image": "https://picsum.photos/seed/r2p2/600/400",
           "addons": []
+        },
+        {
+          "id": "r2-p3",
+          "name": "Kopi O",
+          "price": 3.5,
+          "description": "Traditional black coffee, strong and aromatic.",
+          "image": "https://picsum.photos/seed/r2p3/600/400",
+          "addons": [
+            { "id": "a12", "name": "Less Sweet", "price": 0 },
+            { "id": "a13", "name": "Extra Ice", "price": 0 }
+          ]
+        },
+        {
+          "id": "r2-p4",
+          "name": "Milo Ais",
+          "price": 4.2,
+          "description": "Iced Milo with condensed milk.",
+          "image": "https://picsum.photos/seed/r2p4/600/400",
+          "addons": [
+            { "id": "a14", "name": "Extra Milo", "price": 1.0 }
+          ]
+        },
+        {
+          "id": "r2-p5",
+          "name": "Fresh Orange Juice",
+          "price": 5.5,
+          "description": "Freshly squeezed orange juice.",
+          "image": "https://picsum.photos/seed/r2p5/600/400",
+          "addons": []
+        },
+        {
+          "id": "r2-p6",
+          "name": "Coconut Water",
+          "price": 4.8,
+          "description": "Fresh young coconut water.",
+          "image": "https://picsum.photos/seed/r2p6/600/400",
+          "addons": []
+        },
+        {
+          "id": "r2-p7",
+          "name": "Bubble Tea",
+          "price": 6.5,
+          "description": "Tapioca pearls in sweet milk tea.",
+          "image": "https://picsum.photos/seed/r2p7/600/400",
+          "addons": [
+            { "id": "a15", "name": "Extra Pearls", "price": 1.5 },
+            { "id": "a16", "name": "Less Sweet", "price": 0 }
+          ]
+        },
+        {
+          "id": "r2-p8",
+          "name": "Green Tea",
+          "price": 3.8,
+          "description": "Refreshing green tea, hot or iced.",
+          "image": "https://picsum.photos/seed/r2p8/600/400",
+          "addons": [
+            { "id": "a17", "name": "Honey", "price": 1.0 }
+          ]
         }
       ]
     },
@@ -102,6 +192,60 @@
           "description": "Warm comforting miso soup.",
           "image": "https://picsum.photos/seed/r3p2/600/400",
           "addons": []
+        },
+        {
+          "id": "r3-p3",
+          "name": "California Roll",
+          "price": 8.5,
+          "description": "Crab, avocado, and cucumber roll.",
+          "image": "https://picsum.photos/seed/r3p3/600/400",
+          "addons": [
+            { "id": "a18", "name": "Extra Wasabi", "price": 0.5 }
+          ]
+        },
+        {
+          "id": "r3-p4",
+          "name": "Tuna Sashimi",
+          "price": 15.0,
+          "description": "Fresh tuna slices (5 pcs).",
+          "image": "https://picsum.photos/seed/r3p4/600/400",
+          "addons": []
+        },
+        {
+          "id": "r3-p5",
+          "name": "Chicken Teriyaki",
+          "price": 11.5,
+          "description": "Grilled chicken with teriyaki sauce.",
+          "image": "https://picsum.photos/seed/r3p5/600/400",
+          "addons": [
+            { "id": "a19", "name": "Extra Sauce", "price": 1.0 }
+          ]
+        },
+        {
+          "id": "r3-p6",
+          "name": "Tempura Vegetables",
+          "price": 7.8,
+          "description": "Crispy fried vegetables with dipping sauce.",
+          "image": "https://picsum.photos/seed/r3p6/600/400",
+          "addons": []
+        },
+        {
+          "id": "r3-p7",
+          "name": "Dragon Roll",
+          "price": 13.5,
+          "description": "Eel and cucumber roll with avocado.",
+          "image": "https://picsum.photos/seed/r3p7/600/400",
+          "addons": []
+        },
+        {
+          "id": "r3-p8",
+          "name": "Green Tea Ice Cream",
+          "price": 5.5,
+          "description": "Traditional Japanese green tea ice cream.",
+          "image": "https://picsum.photos/seed/r3p8/600/400",
+          "addons": [
+            { "id": "a20", "name": "Extra Scoop", "price": 2.5 }
+          ]
         }
       ]
     },
@@ -123,6 +267,52 @@
             { "id": "a7", "name": "Level 2", "price": 0 },
             { "id": "a8", "name": "Level 5", "price": 0 }
           ]
+        },
+        {
+          "id": "r4-p2",
+          "name": "Nasi Geprek",
+          "price": 9.8,
+          "description": "Rice with crispy chicken and sambal.",
+          "image": "https://picsum.photos/seed/r4p2/600/400",
+          "addons": [
+            { "id": "a21", "name": "Extra Rice", "price": 2.0 }
+          ]
+        },
+        {
+          "id": "r4-p3",
+          "name": "Tempe Geprek",
+          "price": 7.5,
+          "description": "Crispy tempe with sambal (vegetarian).",
+          "image": "https://picsum.photos/seed/r4p3/600/400",
+          "addons": [
+            { "id": "a22", "name": "Extra Sambal", "price": 1.0 }
+          ]
+        },
+        {
+          "id": "r4-p4",
+          "name": "Sambal Hijau",
+          "price": 3.5,
+          "description": "Green chili sambal, extra spicy.",
+          "image": "https://picsum.photos/seed/r4p4/600/400",
+          "addons": []
+        },
+        {
+          "id": "r4-p5",
+          "name": "Es Teh Manis",
+          "price": 2.5,
+          "description": "Sweet iced tea to cool down.",
+          "image": "https://picsum.photos/seed/r4p5/600/400",
+          "addons": [
+            { "id": "a23", "name": "Extra Ice", "price": 0 }
+          ]
+        },
+        {
+          "id": "r4-p6",
+          "name": "Kerupuk",
+          "price": 1.5,
+          "description": "Crispy crackers as side dish.",
+          "image": "https://picsum.photos/seed/r4p6/600/400",
+          "addons": []
         }
       ]
     }
@@ -155,6 +345,41 @@
           "price": 5.2,
           "description": "Half-dozen fresh eggs.",
           "image": "https://picsum.photos/seed/m1p3/600/400"
+        },
+        {
+          "id": "m1-p4",
+          "name": "Instant Noodles",
+          "price": 2.8,
+          "description": "Quick and easy meal.",
+          "image": "https://picsum.photos/seed/m1p4/600/400"
+        },
+        {
+          "id": "m1-p5",
+          "name": "Canned Tuna",
+          "price": 4.5,
+          "description": "Protein-rich canned tuna.",
+          "image": "https://picsum.photos/seed/m1p5/600/400"
+        },
+        {
+          "id": "m1-p6",
+          "name": "Milk (1L)",
+          "price": 6.8,
+          "description": "Fresh whole milk.",
+          "image": "https://picsum.photos/seed/m1p6/600/400"
+        },
+        {
+          "id": "m1-p7",
+          "name": "Cereal",
+          "price": 8.5,
+          "description": "Breakfast cereal with vitamins.",
+          "image": "https://picsum.photos/seed/m1p7/600/400"
+        },
+        {
+          "id": "m1-p8",
+          "name": "Cookies",
+          "price": 3.2,
+          "description": "Sweet chocolate chip cookies.",
+          "image": "https://picsum.photos/seed/m1p8/600/400"
         }
       ]
     },
@@ -178,6 +403,48 @@
           "price": 6.9,
           "description": "Fresh and sweet.",
           "image": "https://picsum.photos/seed/m2p2/600/400"
+        },
+        {
+          "id": "m2-p3",
+          "name": "Apples (1kg)",
+          "price": 8.5,
+          "description": "Fresh red apples.",
+          "image": "https://picsum.photos/seed/m2p3/600/400"
+        },
+        {
+          "id": "m2-p4",
+          "name": "Yogurt",
+          "price": 3.8,
+          "description": "Creamy strawberry yogurt.",
+          "image": "https://picsum.photos/seed/m2p4/600/400"
+        },
+        {
+          "id": "m2-p5",
+          "name": "Energy Drink",
+          "price": 5.5,
+          "description": "Boost your energy.",
+          "image": "https://picsum.photos/seed/m2p5/600/400"
+        },
+        {
+          "id": "m2-p6",
+          "name": "Chocolate Bar",
+          "price": 2.8,
+          "description": "Sweet milk chocolate.",
+          "image": "https://picsum.photos/seed/m2p6/600/400"
+        },
+        {
+          "id": "m2-p7",
+          "name": "Ice Cream",
+          "price": 4.2,
+          "description": "Vanilla ice cream cup.",
+          "image": "https://picsum.photos/seed/m2p7/600/400"
+        },
+        {
+          "id": "m2-p8",
+          "name": "Chips",
+          "price": 3.5,
+          "description": "Crispy potato chips.",
+          "image": "https://picsum.photos/seed/m2p8/600/400"
         }
       ]
     },
@@ -201,6 +468,48 @@
           "price": 2.5,
           "description": "Smooth black ink.",
           "image": "https://picsum.photos/seed/m3p2/600/400"
+        },
+        {
+          "id": "m3-p3",
+          "name": "Highlighter",
+          "price": 1.8,
+          "description": "Yellow highlighter marker.",
+          "image": "https://picsum.photos/seed/m3p3/600/400"
+        },
+        {
+          "id": "m3-p4",
+          "name": "Stapler",
+          "price": 8.5,
+          "description": "Office stapler with staples.",
+          "image": "https://picsum.photos/seed/m3p4/600/400"
+        },
+        {
+          "id": "m3-p5",
+          "name": "Calculator",
+          "price": 12.0,
+          "description": "Basic scientific calculator.",
+          "image": "https://picsum.photos/seed/m3p5/600/400"
+        },
+        {
+          "id": "m3-p6",
+          "name": "Folder",
+          "price": 2.2,
+          "description": "Plastic file folder.",
+          "image": "https://picsum.photos/seed/m3p6/600/400"
+        },
+        {
+          "id": "m3-p7",
+          "name": "Sticky Notes",
+          "price": 3.5,
+          "description": "Colorful sticky notes pack.",
+          "image": "https://picsum.photos/seed/m3p7/600/400"
+        },
+        {
+          "id": "m3-p8",
+          "name": "USB Cable",
+          "price": 6.8,
+          "description": "Universal USB charging cable.",
+          "image": "https://picsum.photos/seed/m3p8/600/400"
         }
       ]
     }
